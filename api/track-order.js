@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
       const totalCount = await redis.incr('order_counter');
 
       // 2. Use Modulo (%) to calculate your looping milestone number
-      const relativeCount = totalCount % 499;
+      const relativeCount = totalCount % 1;
 
       // 3. CHECK: If the remainder is 0, it means we hit exactly 499, 998, 1497, etc.
       if (relativeCount === 0) {
@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
       return res.status(200).json({ 
         success: true, 
         globalCount: totalCount,
-        displayCount: relativeCount === 0 ? 499 : relativeCount, // Keeps it showing 499 on hit instead of 0
+        displayCount: relativeCount === 0 ? 1 : relativeCount, // Keeps it showing 499 on hit instead of 0
         milestoneReached: relativeCount === 0
       });
 

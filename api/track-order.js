@@ -2,7 +2,7 @@ const { Redis } = require('@upstash/redis');
 
 const redis = new Redis({
   url: 'https://good-drum-142535.upstash.io',
-  token: 'gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMwE',
+  token: 'gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMw',
 });
 
 module.exports = async (req, res) => {

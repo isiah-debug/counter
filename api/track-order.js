@@ -31,7 +31,8 @@ module.exports = async (req, res) => {
           body: JSON.stringify({
             service_id: 'service_rpfkof4',
             template_id: 'template_hkrwbdu',
-            user_id: 'hxUyPW7DDvYhSK7gj',
+            user_id: 'hxUyPW7DDvYhSK7gJ',
+            accessToken: 'b67sLs5FivD2bTNygwiwq',
             template_params: {
               order_id: String(orderId || 'N/A'),
               customer_name: String(customerName || 'Valued Customer'),

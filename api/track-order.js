@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
       return res.status(200).json({ 
         success: true, 
         globalCount: totalCount,
-        displayCount: relativeCount === 0 ? 1 : relativeCount, // Keeps it showing 499 on hit instead of 0
+        displayCount: relativeCount === 0 ? 499 : relativeCount, // Keeps it showing 499 on hit instead of 0
         milestoneReached: relativeCount === 0
       });
 

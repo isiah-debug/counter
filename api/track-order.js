@@ -1,8 +1,9 @@
 const { Redis } = require('@upstash/redis');
 
+// This safely pulls your credentials straight from Vercel's environment vault
 const redis = new Redis({
-  url: 'https://good-drum-142535.upstash.io',
-  token: 'gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMwE',
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
 module.exports = async (req, res) => {

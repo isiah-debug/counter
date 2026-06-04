@@ -1,0 +1,8 @@
+{
+  "name": "shopify-counter",
+  "version": "1.0.0",
+  "main": "api/track-order.js",
+  "dependencies": {
+    "@upstash/redis": "^1.34.4"
+  }
+}

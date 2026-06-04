@@ -12,13 +12,13 @@
     .then(data => {
       const currentCount = parseInt(data.result);
       console.log("Current global count it:", currentCount);
-      if (currentCount >= 2) {
+      if (currentCount >= 499) {
         const orderData = {
           order_id: "{{ order.name }}",
           customer_email: "{{ order.email }}",
           customer_name: "{{ order.customer.name }}"
         };
-        fetch(`${upstashUrl}/DECRBY/${counterKey}/2`, {
+        fetch(`${upstashUrl}/DECRBY/${counterKey}/499`, {
           headers: { Authorization: `Bearer ${upstashToken}` }
         })
         .then(() => {

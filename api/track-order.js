@@ -1,37 +1,29 @@
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  emailjs.init("hxUyPW7DDvYhSK7gJ");
-  if(shopify.first_time_accessed) {
-    const upstashUrl = "https://good-drum-142535.upstash.io";
-    const upstashToken = "gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMw"
-    const counterKey = "global_shopify_order_counter"
-    fetch('${upstashUrl}/INCR/${counterKey}`, {
-          headers: { Authorization: `Bearer ${upstashToken}` }
-    })
-    .then(response => response.json())
-    .then(data => {
-      const currentCount = parseInt(data.result);
-      console.log("Current global count it:", currentCount);
-      if (currentCount >= 499) {
-        const orderData = {
-          order_id: "{{ order.name }}",
-          customer_email: "{{ order.email }}",
-          customer_name: "{{ order.customer.name }}"
-        };
-        fetch(`${upstashUrl}/DECRBY/${counterKey}/499`, {
-          headers: { Authorization: `Bearer ${upstashToken}` }
-        })
-        .then(() => {
-          emailjs.send("service_rpfkof4", "template_hkrwbdu", orderData)
-          .then(() => {
-            console.log("Milestone reached! Notification email sent.");
-          })
-          .catch((error) => consol.error("EmailJS error:", error));
-        });
-      }
-    })
-.catch(error => console.error("Database Connection Error:", error));
-else {
-  console.log("Page refresh detected. Counter skipped for safety.");
-}
-</script>
+const { Redis } = require('@upstash/redis');
+
+// Initialize Upstash Redis
+const redis = new Redis({
+  url: process.env.https://good-drum-142535.upstash.io,
+  token: process.env.gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMw,
+});
+
+module.exports = async (req, res) => {
+  // Handle incoming POST request from Shopify
+  if (req.method === 'POST') {
+    try {
+      const { orderId, customerEmail, customerName } = req.body;
+
+      // 1. Increment your counter in Upstash
+      const newCount = await redis.incr('order_counter');
+
+      // 2. Add your EmailJS sending logic here using node-specific formatting if needed, 
+      // or keep it simple for your counter test first!
+
+      return res.status(200).json({ success: true, currentCount: newCount });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  } else {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+};

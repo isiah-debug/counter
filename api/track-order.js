@@ -2,8 +2,8 @@ const { Redis } = require('@upstash/redis');
 
 // Initialize Upstash Redis
 const redis = new Redis({
-  url: process.env.https://good-drum-142535.upstash.io,
-  token: process.env.gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMw,
+  url: 'https://good-drum-142535.upstash.io',
+  token: 'gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMwE', 
 });
 
 module.exports = async (req, res) => {

@@ -1,9 +1,8 @@
 const { Redis } = require('@upstash/redis');
 
-// Initialize Upstash Redis
 const redis = new Redis({
-  url: 'https://good-drum-142535.upstash.io',
-  token: 'gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMwE', 
+  url: 'https://good-drum-142535.upstash.io', // Your hardcoded url from line 5
+  token: 'gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZ mFjMwE', // Your token from line 6
 });
 
 module.exports = async (req, res) => {
@@ -15,10 +14,23 @@ module.exports = async (req, res) => {
       // 1. Increment your counter in Upstash
       const newCount = await redis.incr('order_counter');
 
-      // 2. Add your EmailJS sending logic here using node-specific formatting if needed, 
-      // or keep it simple for your counter test first!
+      // 2. CHECK: Is this the 499th order?
+      if (newCount === 499) {
+        console.log(` MILESTONE HIT: Order #${orderId} is number 499!`);
+        
+        // ==========================================
+        // PLACE YOUR EMAILJS / NOTIFICATION CODE HERE
+        // ==========================================
+        
+      }
 
-      return res.status(200).json({ success: true, currentCount: newCount });
+      // Return response back to Shopify
+      return res.status(200).json({ 
+        success: true, 
+        currentCount: newCount,
+        milestoneReached: newCount === 499 
+      });
+
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

@@ -36,6 +36,12 @@ module.exports = async (req, res) => {
       if (isMilestone) {
         console.log(`🎯 Milestone reached at global order #${totalCount}! Firing EmailJS...`);
 
+        // 7. Smart name extraction fallback:
+        // If customerName is blank/missing, split the email to get a clean handle (e.g. "johndoe" from johndoe@gmail.com)
+        const verifiedName = (customerName && customerName.trim() !== "") 
+          ? customerName 
+          : (customerEmail && customerEmail.includes('@') ? customerEmail.split('@')[0] : "Valued Customer");
+
         // Send Email via EmailJS REST API
         const emailResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
           method: 'POST',
@@ -47,10 +53,10 @@ module.exports = async (req, res) => {
             service_id: 'service_rpfkof4',
             template_id: 'template_hkrwbdu',
             user_id: 'hxUyPW7DDvYhSK7gj',
-            accessToken: 'b67sLs5FivD2bTNygwiwq', // <-- Ensure your private key is here
+            accessToken: 'b67sLs5FivD2bTNygwiwq', 
             template_params: {
               order_id: String(orderId || 'N/A'),
-              customer_name: String(customerName || 'Valued Customer'),
+              customer_name: String(verifiedName),
               customer_email: String(customerEmail || 'N/A'),
               total_orders: String(totalCount),
             },
@@ -61,7 +67,7 @@ module.exports = async (req, res) => {
         console.log('✉️ EmailJS Server Response:', resText);
       }
 
-      // Return your response back to your Shopify Pixel
+      // Return your response back to your Shopify Pixel sandbox environment
       return res.status(200).json({ 
         success: true, 
         globalCount: totalCount,

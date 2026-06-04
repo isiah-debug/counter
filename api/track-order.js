@@ -53,10 +53,10 @@ module.exports = async (req, res) => {
             service_id: 'service_rpfkof4',
             template_id: 'template_hkrwbdu',
             user_id: 'hxUyPW7DDvYhSK7gj',
-            accessToken: 'b67sLs5FivD2bTNygwiwq', // <-- MAKE SURE YOUR KEY IS PASTED HERE
+            accessToken: 'b67sLs5FivD2bTNygwiwq', //
             template_params: {
               order_id: String(orderId || 'N/A'),
-              customer_name: String(verifiedName), // <-- THIS MAKES SURE THE REPAIRED NAME LOGIC IS PASSED TO EMAILJS
+              customer_name: String(verifiedName), // 
               customer_email: String(customerEmail || 'N/A'),
               total_orders: String(totalCount),
             },

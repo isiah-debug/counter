@@ -1,8 +1,7 @@
 const { Redis } = require('@upstash/redis');
 
-// This safely pulls your credentials straight from Vercel's environment vault
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
+  url: 'https://good-drum-142535.upstash.io',
   token: 'gQAAAAAAAizHAAIgcDEyMTY4NWU5ODk3OGQ0MTRhODc0YzgwZjAzMTJjZmFjMw',
 });
 
@@ -16,39 +15,42 @@ module.exports = async (req, res) => {
 
       // 2. Use Modulo (%) to calculate your looping milestone number
       const relativeCount = totalCount % 499;
+      const isMilestone = relativeCount === 0;
 
       // 3. CHECK: If the remainder is 0, we hit exactly 499 (or its multiples)
-      if (relativeCount === 0) {
+      if (isMilestone) {
         console.log(`🎯 Milestone reached at global order #${totalCount}! Firing EmailJS...`);
 
         // Send Email via EmailJS REST API
-        await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        const emailResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
           body: JSON.stringify({
             service_id: 'service_rpfkof4',
             template_id: 'template_hkrwbdu',
             user_id: 'hxUyPW7DDvYhSK7gj',
             template_params: {
-              order_id: orderId || 'N/A',
-              customer_name: customerName || 'Valued Customer',
-              customer_email: customerEmail || 'N/A',
-              total_orders: totalCount,
+              order_id: String(orderId || 'N/A'),
+              customer_name: String(customerName || 'Valued Customer'),
+              customer_email: String(customerEmail || 'N/A'),
+              total_orders: String(totalCount),
             },
           }),
         });
 
-        console.log('✉️ EmailJS request sent successfully!');
+        const resText = await emailResponse.text();
+        console.log('✉️ EmailJS Server Response:', resText);
       }
 
       // Return your response back to your terminal/Shopify
       return res.status(200).json({ 
         success: true, 
         globalCount: totalCount,
-        displayCount: relativeCount === 0 ? 499 : relativeCount,
-        milestoneReached: relativeCount === 0
+        displayCount: isMilestone ? 499 : relativeCount,
+        milestoneReached: isMilestone
       });
 
     } catch (error) {
